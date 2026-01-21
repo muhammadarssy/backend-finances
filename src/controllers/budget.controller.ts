@@ -1,6 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import {
   getBudgetByMonth,
+  getBudgetById,
   upsertBudget,
   deleteBudget,
 } from "../services/budget.service.js";
@@ -22,6 +23,22 @@ export async function getBudgetHandler(
   const year = request.query.year ? parseInt(request.query.year, 10) : undefined;
 
   const budget = await getBudgetByMonth(userId, month, year);
+
+  return sendSuccess(reply, budget, "OK");
+}
+
+export async function getBudgetByIdHandler(
+  request: FastifyRequest<{
+    Params: {
+      id: string;
+    };
+  }>,
+  reply: FastifyReply
+) {
+  const userId = request.user!.id;
+  const { id } = request.params;
+
+  const budget = await getBudgetById(id, userId);
 
   return sendSuccess(reply, budget, "OK");
 }

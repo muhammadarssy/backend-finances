@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 import {
   getBudgetHandler,
+  getBudgetByIdHandler,
   upsertBudgetHandler,
   deleteBudgetHandler,
 } from "../controllers/budget.controller.js";
@@ -57,6 +58,36 @@ export default async function budgetRoutes(fastify: FastifyInstance) {
       },
     },
     getBudgetHandler
+  );
+
+  // Get budget by ID
+  fastify.get(
+    "/:id",
+    {
+      schema: {
+        description: "Get budget detail by ID",
+        tags: ["budgets"],
+        security: [{ bearerAuth: [] }],
+        params: {
+          type: "object",
+          required: ["id"],
+          properties: {
+            id: { type: "string" },
+          },
+        },
+        response: {
+          200: {
+            type: "object",
+            properties: {
+              success: { type: "boolean" },
+              message: { type: "string" },
+              data: { type: "object" },
+            },
+          },
+        },
+      },
+    },
+    getBudgetByIdHandler
   );
 
   // Upsert budget

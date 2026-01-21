@@ -168,7 +168,7 @@ export async function createTransaction(userId: string, data: CreateTransactionI
         throw new ForbiddenError("You don't have access to this category");
       }
 
-      if (category.type !== data.type.toLowerCase()) {
+      if (category.type !== data.type) {
         throw new ValidationError("Category type must match transaction type");
       }
     }
