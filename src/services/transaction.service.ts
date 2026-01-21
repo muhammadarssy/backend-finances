@@ -6,6 +6,7 @@ import {
   UpdateTransactionInput,
 } from "../validators/transaction.js";
 import { TransactionType } from "@prisma/client";
+import { serializeDecimal } from "../utils/serializer.js";
 
 export async function listTransactions(
   userId: string,
@@ -96,7 +97,7 @@ export async function listTransactions(
   ]);
 
   return {
-    transactions,
+    transactions: serializeDecimal(transactions),
     pagination: {
       page,
       limit,
@@ -130,7 +131,7 @@ export async function getTransactionById(transactionId: string, userId: string) 
     throw new ForbiddenError("You don't have access to this transaction");
   }
 
-  return transaction;
+  return serializeDecimal(transaction);
 }
 
 export async function createTransaction(userId: string, data: CreateTransactionInput) {

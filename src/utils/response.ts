@@ -18,7 +18,14 @@ export function sendSuccess<T>(
     message,
     data,
   };
-  return reply.status(statusCode).send(response);
+  
+  // Force JSON serialization to handle Prisma types
+  const jsonString = JSON.stringify(response);
+  
+  return reply
+    .status(statusCode)
+    .header('Content-Type', 'application/json')
+    .send(jsonString);
 }
 
 export function sendError(
